@@ -26,7 +26,7 @@ def _sort_core_market_as_first(all_shop_ids: list[str], home_market: str) -> lis
 
 def _convert_shop_ids(podio_data: dict) -> str:
     all_shop_ids = []
-    for location in podio_data['Markets_to_activate_for_the_partner']:
+    for location in podio_data['locations_to_activate']:
         if f"{location}-" not in podio_data.get('All_Shop_IDs', ''):
             all_shop_ids.append(f'{location}-create')
 
