@@ -6,7 +6,7 @@ from tasks.logic import TasksManager
 from interface import GUI
 
 
-def get_tasks(user_inputs: dict, chosen_tasks: dict):
+def get_selected_tasks(user_inputs: dict, chosen_tasks: dict):
     if user_inputs['All_tasks']:
         return {
             task_key.replace("_", " "): chosen_tasks[task_key.replace("_", " ")]
@@ -32,16 +32,17 @@ def setup_chromedriver_options(user_inputs: dict) -> ChromeOptions:
     return chrome_options
 
 
-def run(user_inputs: dict, chosen_tasks: dict):
+def run():
+    gui = GUI()
+    user_inputs = gui.handle()
+    chosen_tasks = get_selected_tasks(user_inputs, chosen_tasks=gui.tasks)
+
     options = setup_chromedriver_options(user_inputs)
     driver = Chrome(options=options, service=ChromeService())
 
     manager = TasksManager(user_inputs['comment_frequency'], user_inputs, options, driver)
-    manager.perform_data(chosen_tasks)
+    manager.run(chosen_tasks)
 
 
 if __name__ == "__main__":
-    gui = GUI()
-    user_inputs = gui.handle()
-    chosen_tasks = get_tasks(user_inputs, chosen_tasks=gui.tasks)
-    run(user_inputs, chosen_tasks)
+    run()

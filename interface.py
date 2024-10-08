@@ -4,7 +4,7 @@ from gooey import Gooey, GooeyParser
 
 
 @Gooey(
-        program_name="Integration tool",
+        program_name="Podio Integration tool",
         program_description="This tool is used to scrape Podio updates and moves them into other services",
         terminal_font_color='#FFFFFF',
         terminal_panel_color='#222222',
@@ -21,7 +21,7 @@ from gooey import Gooey, GooeyParser
     )
 class GUI:
     def __init__(self):
-        self.tasks = json.load(open("additional_files/tasks.json"))
+        self.tasks = json.load(open("config/tasks.json"))
 
     @staticmethod
     def additional_options_tab(parser):

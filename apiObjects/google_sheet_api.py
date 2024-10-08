@@ -1,4 +1,5 @@
 import os
+
 import gspread
 import pandas as pd
 import gspread_dataframe as gd
@@ -7,6 +8,7 @@ from googleapiclient.discovery import build
 from googleapiclient.http import MediaIoBaseUpload
 from io import BytesIO
 from oauth2client.service_account import ServiceAccountCredentials
+
 from utilites.config_parser import get_config
 
 BASE_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__))).split('objects')[0]
@@ -50,3 +52,15 @@ def upload_file(origin_file: BytesIO, mime_type='image/png') -> str:
     file = service.files().create(body=file_metadata, media_body=media, fields='id,webViewLink').execute()
 
     return file.get('webViewLink')
+
+
+def get_available_space() -> float:
+    service = get_drive_service()
+
+    about = service.about().get(fields='storageQuota').execute()
+    quota = about['storageQuota']
+    used_space = int(quota['usage'])
+    total_space = int(quota['limit'])
+    available_space = total_space - used_space
+
+    return available_space / (1024 * 1024)
